@@ -1,0 +1,14 @@
+{
+    "name": "bbc-http-restclient",
+    "description": "A REST client for BBC resources",
+    "author": "Mike Suggitt",
+    "version": "0.0.1",
+    "private": true,
+    "dependencies": {
+        "http": "*",
+        "url": "*",
+        "q": "*"
+    },
+    "engine": "node >= 0.8",
+    "main": "bbc-http-restclient.js"
+}
