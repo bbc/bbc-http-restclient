@@ -50,20 +50,30 @@ RestClient.prototype.request = function (_options) {
                 this.cacheManager.reserveCacheSpace(http_options);
             }
             var body = options.body || null;
-            if (this.defaults.proxy || options.proxy) {
-                var _proxy = this.defaults.proxy || options.proxy;
-                var connectReq = http.request({
-                    host: _proxy.host,
-                    port: _proxy.port,
-                    method: 'CONNECT',
-                    path: parsedUrl.hostname
-                }).on('connect', function (res, socket, head) {
+            if(isSSL) {
+                if (this.defaults.proxy || options.proxy) {
+                    var _proxy = this.defaults.proxy || options.proxy;
+                    var connectReq = http.request({
+                        host: _proxy.host,
+                        port: _proxy.port,
+                        method: 'CONNECT',
+                        path: parsedUrl.hostname
+                    }).on('connect', function (res, socket, head) {
                         http_options.socket = socket;
                         var req = this._makeRequest(http_options, body, options, this);
                     }.bind(this)).end();
+                }
+                else {
+                    this._makeRequest(http_options, body, options, this);
+                }
             }
             else {
-                var req = this._makeRequest(http_options, body, options, this);
+                if (this.defaults.proxy || options.proxy) {
+                    http_options.path = options.url;
+                    http_options.host = options.proxy.host;
+                    http_options.port = options.proxy.port;
+                }
+                this._makeRequest(http_options, body, options, this);
             }
         }.bind(this));
     }
