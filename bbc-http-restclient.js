@@ -38,6 +38,7 @@ RestClient.prototype.request = function (_options) {
             if (options.ca) http_options.ca = options.ca;
             if (options.cert) http_options.cert = options.cert;
             if (options.key) http_options.key = options.key;
+            if (options.pfx) http_options.pfx = options.pfx;
             http_options.http_module = https;
         }
 
