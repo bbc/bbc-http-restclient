@@ -70,7 +70,19 @@ RestClient.prototype.request = function (_options) {
                 }
             }
             else {
-                if (this.defaults.proxy || options.proxy) {
+                var isNonProxyHost = false;
+                if (this.defaults.nonProxyHosts && Array.isArray(this.defaults.nonProxyHosts)) {
+                    for (var i = 0; i < this.defaults.nonProxyHosts.length; ++i) {
+                        if (this.defaults.nonProxyHosts[i] == http_options.host) {
+                            isNonProxyHost = true;
+                            break;
+                        }
+                    }
+                }
+                
+                if (isNonProxyHost) {
+                    delete(options.proxy);
+                } else if (this.defaults.proxy || options.proxy) {
                     http_options.path = options.url;
                     http_options.host = options.proxy.host;
                     http_options.port = options.proxy.port;
